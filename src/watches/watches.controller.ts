@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
 import { WatchesService } from './watches.service';
 import { CreateWatchDto } from './dto/create-watch.dto';
+import { SearchWatchDto } from './dto/search-watch.dto';
 import { UpdateWatchDto } from './dto/update-watch.dto';
 
 @Controller('watches')
@@ -13,8 +14,8 @@ export class WatchesController {
   }
 
   @Get()
-  findAll() {
-    return this.watchesService.findAll();
+  findMany(@Param() searchWatchDto: SearchWatchDto) {
+    return this.watchesService.findMany(searchWatchDto);
   }
 
   @Get(':id')
@@ -25,10 +26,5 @@ export class WatchesController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateWatchDto: UpdateWatchDto) {
     return this.watchesService.update(+id, updateWatchDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.watchesService.remove(+id);
   }
 }
