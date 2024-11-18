@@ -12,3 +12,37 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Watch {
+  id               Int      @id @default(autoincrement())
+  name             String
+  reference_number String
+  retail_price     Int
+  release_date     DateTime
+
+  brandId    Int
+  currencyId Int
+  countryId  Int
+
+  brand          Brand    @relation(fields: [brandId], references: [id])
+  currency       Currency @relation(fields: [currencyId], references: [id])
+  origin_country Country  @relation(fields: [countryId], references: [id])
+}
+
+model Brand {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Watch Watch[]
+}
+
+model Currency {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Watch Watch[]
+}
+
+model Country {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Watch Watch[]
+}
