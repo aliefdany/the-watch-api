@@ -20,6 +20,7 @@ async function bootstrap() {
     .setDescription('Collection of APIs for managing watch')
     .setVersion('1.0')
     .addTag('watches')
+    .addBearerAuth()
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
