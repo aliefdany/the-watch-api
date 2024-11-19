@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateWatchDto } from './dto/create-watch.dto';
-import { SearchWatchDto } from './dto/search-watch.dto';
+import { GetWatchDto } from './dto/get-watch.dto';
 import { UpdateWatchDto } from './dto/update-watch.dto';
 import { WatchEntity } from './entities/watch.entity';
 
@@ -73,13 +73,30 @@ export class WatchesService {
     };
   }
 
-  async findMany(data: SearchWatchDto): Promise<WatchEntity[]> {
-    const { name, reference_number, total_items, page, take } = data;
+  async findMany(data: GetWatchDto): Promise<WatchEntity[]> {
+    const { search } = data;
 
-    const skip = total_items * page;
+    let { page, take } = data;
+
+    const totalWatches = await this.prisma.watch.count();
+
+    if (!page) {
+      page = 1;
+    }
+
+    if (!take) {
+      take = totalWatches;
+    }
+
+    const skip = (page - 1) * take;
 
     const watches = await this.prisma.watch.findMany({
-      where: { OR: [{ name }, { reference_number }] },
+      where: {
+        OR: [
+          { name: { contains: search } },
+          { reference_number: { contains: search } },
+        ],
+      },
       skip,
       take,
       include: { brand: true, currency: true, origin_country: true },

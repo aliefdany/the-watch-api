@@ -1,7 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { WatchesService } from './watches.service';
 import { CreateWatchDto } from './dto/create-watch.dto';
-import { SearchWatchDto } from './dto/search-watch.dto';
+import { GetWatchDto } from './dto/get-watch.dto';
 import { UpdateWatchDto } from './dto/update-watch.dto';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { WatchEntity } from './entities/watch.entity';
@@ -19,19 +27,19 @@ export class WatchesController {
 
   @Get()
   @ApiOkResponse({ type: WatchEntity, isArray: true })
-  findMany(@Param() searchWatchDto: SearchWatchDto) {
-    return this.watchesService.findMany(searchWatchDto);
+  findMany(@Query() GetWatchDto: GetWatchDto) {
+    return this.watchesService.findMany(GetWatchDto);
   }
 
   @Get(':id')
   @ApiOkResponse({ type: WatchEntity })
-  findOne(@Param('id') id: string) {
-    return this.watchesService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.watchesService.findOne(id);
   }
 
   @Patch(':id')
   @ApiOkResponse({ type: WatchEntity })
-  update(@Param('id') id: string, @Body() updateWatchDto: UpdateWatchDto) {
-    return this.watchesService.update(+id, updateWatchDto);
+  update(@Param('id') id: number, @Body() updateWatchDto: UpdateWatchDto) {
+    return this.watchesService.update(id, updateWatchDto);
   }
 }
