@@ -38,7 +38,7 @@ export class WatchesService {
       });
     }
 
-    let currency = await this.prisma.country.findFirst({
+    let currency = await this.prisma.currency.findFirst({
       where: { name: currencyName },
     });
 
