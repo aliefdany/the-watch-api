@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateWatchDto } from './dto/create-watch.dto';
 import { GetWatchDto } from './dto/get-watch.dto';
@@ -119,6 +119,10 @@ export class WatchesService {
       where: { id },
       include: { brand: true, currency: true, origin_country: true },
     });
+
+    if (!watch) {
+      throw new NotFoundException(`Watch with id ${id} is not found`);
+    }
 
     return {
       id: watch.id,
