@@ -3,8 +3,10 @@ import { WatchesService } from './watches.service';
 import { CreateWatchDto } from './dto/create-watch.dto';
 import { SearchWatchDto } from './dto/search-watch.dto';
 import { UpdateWatchDto } from './dto/update-watch.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('watches')
+@ApiTags('watches')
 export class WatchesController {
   constructor(private readonly watchesService: WatchesService) {}
 
