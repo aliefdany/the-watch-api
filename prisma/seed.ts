@@ -2,6 +2,32 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
+  // seed role
+  const adminRole = await prisma.role.upsert({
+    where: { name: 'admin' },
+    update: {},
+    create: { name: 'admin' },
+  });
+
+  const userRole = await prisma.role.upsert({
+    where: { name: 'user' },
+    update: {},
+    create: { name: 'user' },
+  });
+
+  // seed account
+  await prisma.account.upsert({
+    where: { username: 'alief' },
+    update: {},
+    create: { username: 'alief', password: 'random123', roleId: adminRole.id },
+  });
+
+  await prisma.account.upsert({
+    where: { username: 'dany' },
+    update: {},
+    create: { username: 'dany', password: 'random123', roleId: userRole.id },
+  });
+
   // Seed brands
   const brand1 = await prisma.brand.upsert({
     where: { name: 'Rolex' },
