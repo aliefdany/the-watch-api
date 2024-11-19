@@ -146,6 +146,12 @@ export class WatchesService {
       origin_country: countryName,
     } = data;
 
+    const watch = await this.prisma.watch.findUnique({ where: { id } });
+
+    if (!watch) {
+      throw new NotFoundException(`Watch with id ${id} is not found`);
+    }
+
     let brand = await this.prisma.brand.findFirst({
       where: { name: brandName },
     });
