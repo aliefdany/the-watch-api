@@ -15,8 +15,8 @@ datasource db {
 
 model Watch {
   id               Int      @id @default(autoincrement())
-  name             String
-  reference_number String
+  name             String   @unique
+  reference_number String   @unique
   retail_price     Int
   release_date     DateTime
 
@@ -31,18 +31,18 @@ model Watch {
 
 model Brand {
   id    Int     @id @default(autoincrement())
-  name  String
+  name  String  @unique
   Watch Watch[]
 }
 
 model Currency {
   id    Int     @id @default(autoincrement())
-  name  String
+  name  String  @unique
   Watch Watch[]
 }
 
 model Country {
   id    Int     @id @default(autoincrement())
-  name  String
+  name  String  @unique
   Watch Watch[]
 }
