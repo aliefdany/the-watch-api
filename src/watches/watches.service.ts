@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Watch } from '@prisma/client';
 import { CreateWatchDto } from './dto/create-watch.dto';
 import { SearchWatchDto } from './dto/search-watch.dto';
 import { UpdateWatchDto } from './dto/update-watch.dto';
+import { WatchEntity } from './entities/watch.entity';
 
 @Injectable()
 export class WatchesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: CreateWatchDto): Promise<Watch> {
+  async create(data: CreateWatchDto): Promise<WatchEntity> {
     const {
       name,
       reference_number,
@@ -48,7 +48,7 @@ export class WatchesService {
       });
     }
 
-    return this.prisma.watch.create({
+    const newWatch = await this.prisma.watch.create({
       data: {
         name,
         reference_number,
@@ -58,28 +58,64 @@ export class WatchesService {
         currencyId: currency.id,
         countryId: country.id,
       },
+      include: { brand: true, currency: true, origin_country: true },
     });
+
+    return {
+      id: newWatch.id,
+      name: newWatch.name,
+      reference_number: newWatch.reference_number,
+      release_date: newWatch.release_date,
+      retail_price: newWatch.retail_price,
+      brand: newWatch.brand.name,
+      origin_country: newWatch.origin_country.name,
+      currency: newWatch.currency.name,
+    };
   }
 
-  async findMany(data: SearchWatchDto): Promise<Watch[]> {
+  async findMany(data: SearchWatchDto): Promise<WatchEntity[]> {
     const { name, reference_number, total_items, page, take } = data;
 
     const skip = total_items * page;
 
-    return this.prisma.watch.findMany({
+    const watches = await this.prisma.watch.findMany({
       where: { OR: [{ name }, { reference_number }] },
       skip,
       take,
+      include: { brand: true, currency: true, origin_country: true },
     });
+
+    return watches.map((watch) => ({
+      id: watch.id,
+      name: watch.name,
+      reference_number: watch.reference_number,
+      release_date: watch.release_date,
+      retail_price: watch.retail_price,
+      brand: watch.brand.name,
+      origin_country: watch.origin_country.name,
+      currency: watch.currency.name,
+    }));
   }
 
-  async findOne(id: number) {
-    return this.prisma.watch.findUnique({
+  async findOne(id: number): Promise<WatchEntity> {
+    const watch = await this.prisma.watch.findUnique({
       where: { id },
+      include: { brand: true, currency: true, origin_country: true },
     });
+
+    return {
+      id: watch.id,
+      name: watch.name,
+      reference_number: watch.reference_number,
+      release_date: watch.release_date,
+      retail_price: watch.retail_price,
+      brand: watch.brand.name,
+      origin_country: watch.origin_country.name,
+      currency: watch.currency.name,
+    };
   }
 
-  async update(id: number, data: UpdateWatchDto): Promise<Watch> {
+  async update(id: number, data: UpdateWatchDto): Promise<WatchEntity> {
     const {
       reference_number,
       retail_price,
@@ -117,7 +153,7 @@ export class WatchesService {
       });
     }
 
-    return this.prisma.watch.update({
+    const updatedWatch = await this.prisma.watch.update({
       where: { id },
       data: {
         reference_number,
@@ -127,7 +163,19 @@ export class WatchesService {
         countryId: country.id,
         currencyId: currency.id,
       },
+      include: { brand: true, currency: true, origin_country: true },
     });
+
+    return {
+      id: updatedWatch.id,
+      name: updatedWatch.name,
+      reference_number: updatedWatch.reference_number,
+      release_date: updatedWatch.release_date,
+      retail_price: updatedWatch.retail_price,
+      brand: updatedWatch.brand.name,
+      origin_country: updatedWatch.origin_country.name,
+      currency: updatedWatch.currency.name,
+    };
   }
 
   // remove(id: number) {
