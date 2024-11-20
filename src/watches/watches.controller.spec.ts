@@ -59,7 +59,7 @@ describe('WatchesController', () => {
         name: 'Submariner',
         reference_number: '12345',
         retail_price: 10000,
-        release_date: '2023-01-01',
+        release_date: new Date('2023-01-01'),
         brand: 'Rolex',
         currency: 'USD',
         origin_country: 'Switzerland',
@@ -73,7 +73,12 @@ describe('WatchesController', () => {
 
   describe('findMany', () => {
     it('should return an array of watches', async () => {
-      const getWatchDto: GetWatchDto = { search: '', page: 1, take: 10 };
+      const getWatchDto: GetWatchDto = {
+        search: '',
+        brand: '',
+        page: 1,
+        take: 10,
+      };
       const result = await controller.findMany(getWatchDto);
 
       expect(result).toEqual(mockWatches);
@@ -96,7 +101,7 @@ describe('WatchesController', () => {
         name: 'Updated Submariner',
         reference_number: '54321',
         retail_price: 12000,
-        release_date: '2024-01-01',
+        release_date: new Date('2024-01-01'),
         brand: 'Updated Rolex',
         currency: 'EUR',
         origin_country: 'Germany',

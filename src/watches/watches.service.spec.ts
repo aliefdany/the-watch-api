@@ -36,7 +36,7 @@ describe('WatchesService', () => {
         name: 'Rolex Submariner',
         reference_number: '12345',
         retail_price: 10000,
-        release_date: '2023-01-01',
+        release_date: new Date('2023-01-01'),
         brand: 'Rolex',
         currency: 'USD',
         origin_country: 'Switzerland',
@@ -174,7 +174,7 @@ describe('WatchesService', () => {
       const updateWatchDto = {
         reference_number: '67890',
         retail_price: 15000,
-        release_date: '2024-01-01',
+        release_date: new Date('2024-01-01'),
         brand: 'Omega',
         currency: 'EUR',
         origin_country: 'Germany',
@@ -219,7 +219,7 @@ describe('WatchesService', () => {
       const updateWatchDto = {
         reference_number: '67890',
         retail_price: 15000,
-        release_date: '2024-01-01',
+        release_date: new Date('2024-01-01'),
         brand: 'Omega',
         currency: 'EUR',
         origin_country: 'Germany',
