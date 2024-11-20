@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { WatchesService } from './watches.service';
 import { WatchesController } from './watches.controller';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
   controllers: [WatchesController],
