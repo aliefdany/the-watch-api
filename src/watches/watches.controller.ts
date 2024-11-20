@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Query,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { WatchesService } from './watches.service';
 import { CreateWatchDto } from './dto/create-watch.dto';
@@ -22,6 +24,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('watches')
+@UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('watches')
 export class WatchesController {
   constructor(private readonly watchesService: WatchesService) {}
@@ -30,27 +33,34 @@ export class WatchesController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: WatchEntity })
-  create(@Body() createWatchDto: CreateWatchDto) {
-    return this.watchesService.create(createWatchDto);
+  async create(@Body() createWatchDto: CreateWatchDto): Promise<WatchEntity> {
+    return new WatchEntity(await this.watchesService.create(createWatchDto));
   }
 
   @Get()
   @ApiOkResponse({ type: WatchEntity, isArray: true })
-  findMany(@Query() GetWatchDto: GetWatchDto) {
-    return this.watchesService.findMany(GetWatchDto);
+  async findMany(@Query() GetWatchDto: GetWatchDto): Promise<WatchEntity[]> {
+    const watches = await this.watchesService.findMany(GetWatchDto);
+
+    return watches.map((data) => new WatchEntity(data));
   }
 
   @Get(':id')
   @ApiOkResponse({ type: WatchEntity })
-  findOne(@Param('id') id: number) {
-    return this.watchesService.findOne(id);
+  async findOne(@Param('id') id: number): Promise<WatchEntity> {
+    return new WatchEntity(await this.watchesService.findOne(id));
   }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: WatchEntity })
-  update(@Param('id') id: number, @Body() updateWatchDto: UpdateWatchDto) {
-    return this.watchesService.update(id, updateWatchDto);
+  async update(
+    @Param('id') id: number,
+    @Body() updateWatchDto: UpdateWatchDto,
+  ): Promise<WatchEntity> {
+    return new WatchEntity(
+      await this.watchesService.update(id, updateWatchDto),
+    );
   }
 }

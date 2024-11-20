@@ -15,22 +15,22 @@ export class AuthService {
   ) {}
 
   async signin(username: string, password: string): Promise<AuthEntity> {
-    const user = await this.prisma.account.findUnique({
+    const account = await this.prisma.account.findUnique({
       where: { username },
     });
 
-    if (!user) {
+    if (!account) {
       throw new NotFoundException(`No user found for username: ${username}`);
     }
 
-    const isPasswordValid = user.password === password;
+    const isPasswordValid = account.password === password;
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid password');
     }
 
     return {
-      accessToken: this.jwtService.sign({ userId: user.id }),
+      accessToken: this.jwtService.sign({ accountId: account.id }),
     };
   }
 }

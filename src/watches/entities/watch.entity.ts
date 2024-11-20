@@ -1,9 +1,16 @@
-import { Watch } from '@prisma/client';
+import { Prisma, Brand, Country, Currency } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude, Transform } from 'class-transformer';
 
-type CustomWatch = Omit<Watch, 'brandId' | 'countryId' | 'currencyId'>;
+type WatchWithRelations = Prisma.WatchGetPayload<{
+  include: {
+    brand: true;
+    currency: true;
+    origin_country: true;
+  };
+}>;
 
-export class WatchEntity implements CustomWatch {
+export class WatchEntity implements WatchWithRelations {
   @ApiProperty()
   id: number;
 
@@ -19,12 +26,28 @@ export class WatchEntity implements CustomWatch {
   @ApiProperty()
   release_date: Date;
 
-  @ApiProperty()
-  brand: string;
+  @ApiProperty({ type: String })
+  @Transform(({ value }) => value.name)
+  brand: Brand;
 
-  @ApiProperty()
-  origin_country: string;
+  @ApiProperty({ type: String })
+  @Transform(({ value }) => value.name)
+  origin_country: Country;
 
-  @ApiProperty()
-  currency: string;
+  @ApiProperty({ type: String })
+  @Transform(({ value }) => value.name)
+  currency: Currency;
+
+  @Exclude()
+  brandId: number;
+
+  @Exclude()
+  currencyId: number;
+
+  @Exclude()
+  countryId: number;
+
+  constructor(partial: Partial<WatchEntity>) {
+    Object.assign(this, partial);
+  }
 }
