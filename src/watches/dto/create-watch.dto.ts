@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString, IsDateString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsNotEmpty, IsNumber, IsString, IsDate } from 'class-validator';
 
 export class CreateWatchDto {
   @IsNotEmpty()
@@ -18,9 +19,10 @@ export class CreateWatchDto {
   retail_price: number;
 
   @IsNotEmpty()
-  @IsDateString()
   @ApiProperty({ required: true })
-  release_date: string;
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
+  release_date: Date;
 
   @IsNotEmpty()
   @IsString()

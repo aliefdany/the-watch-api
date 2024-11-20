@@ -53,7 +53,7 @@ export class WatchesService {
         name,
         reference_number,
         retail_price,
-        release_date: new Date(release_date),
+        release_date,
         brandId: brand.id,
         currencyId: currency.id,
         countryId: country.id,
@@ -86,7 +86,7 @@ export class WatchesService {
           { reference_number: { contains: search } },
         ],
         brand: {
-          name: { equals: brand },
+          name: { contains: brand },
         },
       },
       skip,
@@ -142,7 +142,7 @@ export class WatchesService {
       });
     }
 
-    let currency = await this.prisma.country.findFirst({
+    let currency = await this.prisma.currency.findFirst({
       where: { name: currencyName },
     });
 

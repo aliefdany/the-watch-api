@@ -10,7 +10,7 @@ export class UpdateWatchDto extends PartialType(CreateWatchDto) {
   retail_price: number;
 
   @ApiProperty({ required: true })
-  release_date: string;
+  release_date: Date;
 
   @ApiProperty({ required: true })
   brand: string;
