@@ -7,7 +7,7 @@ export class AccountService {
   constructor(private prisma: PrismaService) {}
 
   async findOne(id: number): Promise<Account> {
-    const account = this.prisma.account.findUnique({ where: { id } });
+    const account = await this.prisma.account.findUnique({ where: { id } });
 
     if (!account) {
       throw new NotFoundException();
