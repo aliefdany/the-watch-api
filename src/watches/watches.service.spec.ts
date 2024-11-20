@@ -116,7 +116,12 @@ describe('WatchesService', () => {
 
       prisma.watch.findMany.mockResolvedValue(mockWatches);
 
-      const result = await service.findMany({ search: '', page: 1, take: 10 });
+      const result = await service.findMany({
+        search: '',
+        brand: '',
+        page: 1,
+        take: 10,
+      });
 
       expect(result).toEqual(mockWatches);
       expect(prisma.watch.findMany).toHaveBeenCalled();

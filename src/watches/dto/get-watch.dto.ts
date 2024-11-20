@@ -5,6 +5,11 @@ export class GetWatchDto {
   @IsOptional()
   @IsString()
   @ApiProperty({ required: false })
+  brand: string = '';
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({ required: false })
   search: string = '';
 
   @IsOptional()

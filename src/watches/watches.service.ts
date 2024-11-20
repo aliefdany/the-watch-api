@@ -63,7 +63,7 @@ export class WatchesService {
   }
 
   async findMany(data: GetWatchDto): Promise<Watch[]> {
-    const { search } = data;
+    const { search, brand } = data;
 
     let { page, take } = data;
 
@@ -85,6 +85,9 @@ export class WatchesService {
           { name: { contains: search } },
           { reference_number: { contains: search } },
         ],
+        brand: {
+          name: { equals: brand },
+        },
       },
       skip,
       take,
