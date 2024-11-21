@@ -24,7 +24,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 
-@Controller('watches')
+@Controller({ version: '1', path: 'watches' })
 @UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('watches')
 export class WatchesController {
