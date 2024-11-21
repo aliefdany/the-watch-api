@@ -22,6 +22,7 @@ import {
 import { WatchEntity } from './entities/watch.entity';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('watches')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -39,6 +40,7 @@ export class WatchesController {
 
   @Get()
   @ApiOkResponse({ type: WatchEntity, isArray: true })
+  @UseInterceptors(CacheInterceptor)
   async findMany(@Query() GetWatchDto: GetWatchDto): Promise<WatchEntity[]> {
     const watches = await this.watchesService.findMany(GetWatchDto);
 
