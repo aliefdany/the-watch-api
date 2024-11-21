@@ -144,6 +144,26 @@ describe('AppController (e2e)', () => {
     expect(response.status).toBe(401);
   });
 
+  it('PATCH /watches/:id - Fail to update watch without auth', async () => {
+    const watchId = (await request(app.getHttpServer()).get('/watches')).body[0]
+      .id;
+
+    const updateDto = {
+      reference_number: '116500LN-new',
+      retail_price: 14500,
+      release_date: '2024-02-01',
+      brand: 'Rolex',
+      currency: 'USD',
+      origin_country: 'Switzerland',
+    };
+
+    const response = await request(app.getHttpServer())
+      .patch(`/watches/${watchId}`)
+      .send(updateDto);
+
+    expect(response.status).toBe(401);
+  });
+
   it('GET /watches - Search by name or reference number', async () => {
     const response = await request(app.getHttpServer())
       .get('/watches')
