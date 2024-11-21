@@ -7,7 +7,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { AccountModule } from '../accounts/account.module';
 import { JwtStrategy } from './strategy/jwt.strategy';
 
-export const jwtSecret = '20932jhb2h3kj23k';
+export const jwtSecret = process.env.JWT_SECRET;
 
 @Module({
   imports: [
