@@ -6,6 +6,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateWatchDto } from './dto/create-watch.dto';
 import { UpdateWatchDto } from './dto/update-watch.dto';
 import { GetWatchDto } from './dto/get-watch.dto';
+import { CacheModule } from '@nestjs/cache-manager';
 
 describe('WatchesController', () => {
   let controller: WatchesController;
@@ -33,6 +34,7 @@ describe('WatchesController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [CacheModule.register({ ttl: 60 * 1000 })],
       controllers: [WatchesController],
       providers: [
         {

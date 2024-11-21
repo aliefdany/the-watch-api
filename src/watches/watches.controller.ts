@@ -15,8 +15,10 @@ import { GetWatchDto } from './dto/get-watch.dto';
 import { UpdateWatchDto } from './dto/update-watch.dto';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
 import { WatchEntity } from './entities/watch.entity';
@@ -25,12 +27,13 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller({ version: '1', path: 'watches' })
-@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(ClassSerializerInterceptor, CacheInterceptor)
 @ApiTags('watches')
 export class WatchesController {
   constructor(private readonly watchesService: WatchesService) {}
 
   @Post()
+  @ApiBody({ type: CreateWatchDto, description: 'Create a new watch' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: WatchEntity })
@@ -48,12 +51,22 @@ export class WatchesController {
   }
 
   @Get(':id')
+  @ApiParam({
+    name: 'id',
+    description: "Watch's id that is going to be fetched",
+    type: Number,
+  })
   @ApiOkResponse({ type: WatchEntity })
   async findOne(@Param('id') id: number): Promise<WatchEntity> {
     return new WatchEntity(await this.watchesService.findOne(id));
   }
 
   @Patch(':id')
+  @ApiParam({
+    name: 'id',
+    description: "Watch's id that is going to be updated",
+    type: Number,
+  })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: WatchEntity })
