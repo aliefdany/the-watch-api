@@ -8,8 +8,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('The Watch Catalog API')
-    .setDescription('Collection of APIs for managing watch')
+    .setTitle('The Watch Catalog API⌚')
+    .setDescription(
+      'Welcome to the Watch Catalog API — a RESTful API to manage and explore a luxurious collection of watches. This API provides endpoints for authentication, catalog management, and querying watch data with ease.',
+    )
     .setVersion('1.0')
     .addTag('watches')
     .addBearerAuth()
