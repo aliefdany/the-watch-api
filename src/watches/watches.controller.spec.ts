@@ -7,6 +7,7 @@ import { CreateWatchDto } from './dto/create-watch.dto';
 import { UpdateWatchDto } from './dto/update-watch.dto';
 import { GetWatchDto } from './dto/get-watch.dto';
 import { CacheModule } from '@nestjs/cache-manager';
+import { PrismaService } from '../prisma/prisma.service';
 
 describe('WatchesController', () => {
   let controller: WatchesController;
@@ -41,6 +42,7 @@ describe('WatchesController', () => {
           provide: WatchesService,
           useValue: mockWatchesService,
         },
+        PrismaService,
       ],
     })
       .overrideGuard(JwtAuthGuard)

@@ -25,6 +25,8 @@ import { WatchEntity } from './entities/watch.entity';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '..//auth/roles.guard';
 
 @Controller({ version: '1', path: 'watches' })
 @UseInterceptors(ClassSerializerInterceptor, CacheInterceptor)
@@ -34,7 +36,8 @@ export class WatchesController {
 
   @Post()
   @ApiBody({ type: CreateWatchDto, description: 'Create a new watch' })
-  @UseGuards(JwtAuthGuard)
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: WatchEntity })
   async create(@Body() createWatchDto: CreateWatchDto): Promise<WatchEntity> {
@@ -67,7 +70,8 @@ export class WatchesController {
     description: "Watch's id that is going to be updated",
     type: Number,
   })
-  @UseGuards(JwtAuthGuard)
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: WatchEntity })
   async update(
